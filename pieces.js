@@ -15,7 +15,7 @@ categorieElement.innerText = article.categorie ?? "Pas de description pour le mo
 const disponibility = document.createElement("p");
 if(article.disponibilite === true){
     disponibility.innerText = "En stock"
-}else if(article.disponibilite === false){
+}else{
     disponibility.innerText = "Rupture de stock"
 };
 const sectionFiches = document.querySelector(".fiches");
