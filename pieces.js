@@ -2,12 +2,33 @@
 const reponse = await fetch("pieces-autos.json");
 const pieces = await reponse.json();
 
+
+var activeList = pieces
+
+//gestion du slider de prix
+const slidePrix = document.getElementById("slidePrix");
+slidePrix.valueAsNumber = "60"
+const slidePrixInfo = document.getElementById("slidePrixInfo");
+slidePrix.addEventListener("change", ()=> {
+    slidePrixInfo.innerText = `${slidePrix.valueAsNumber}/60€`
+    document.querySelector(".fiches").innerHTML="";
+    genererPieces(activeList);
+});
+
+
+
 //fonction générant la partie article de la page
 function genererPieces(pieces){
 
+     //impact du slider sur la liste de produit
+    const piecesSlidees = pieces.filter(function (piece){
+        return piece.prix <= slidePrix.valueAsNumber
+    })
+
+
     //création des fiches articles
-    for(let i = 0; i < pieces.length; i++){
-        const article = pieces[i];
+    for(let i = 0; i < piecesSlidees.length; i++){
+        const article = piecesSlidees[i];
         const sectionFiches = document.querySelector(".fiches");
 
         const pieceElement = document.createElement("article");
@@ -40,7 +61,8 @@ genererPieces(pieces);
 const buttonOrigin = document.querySelector(".btn-noFilter");
 buttonOrigin.addEventListener("click",(event)=>{
     document.querySelector(".fiches").innerHTML="";
-    genererPieces(pieces);
+    activeList = pieces;
+    genererPieces(activeList);
 });
 
 //on trie les pièces par prix croissant
@@ -51,7 +73,8 @@ boutonTrier.addEventListener("click",function(){
         return a.prix-b.prix
     });
     document.querySelector(".fiches").innerHTML="";
-    genererPieces(piecesOrdonnees);
+    activeList = piecesOrdonnees;
+    genererPieces(activeList);
 });
 
 //on trie les pièces par prix décroissant
@@ -62,7 +85,8 @@ boutonTrierDecroi.addEventListener("click",function(){
         return b.prix-a.prix
     });
     document.querySelector(".fiches").innerHTML="";
-    genererPieces(piecesOrdonneesDecroi);
+    activeList = piecesOrdonneesDecroi;
+    genererPieces(activeList);
 });
 
 
@@ -73,7 +97,8 @@ boutonFiltrer.addEventListener("click", function(){
         return piece.prix <= 35
     })
     document.querySelector(".fiches").innerHTML="";
-    genererPieces(piecesFiltrees);
+    activeList = piecesFiltrees;
+    genererPieces(activeList);
 });
 
 //on filtre les pièces et enlèvent celles qui n'ont pas de description
@@ -83,7 +108,8 @@ boutonNoDescription.addEventListener("click", function(){
         return piece.description
     })
     document.querySelector(".fiches").innerHTML="";
-    genererPieces(piecesDescription)
+    activeList = piecesDescription;
+    genererPieces(activeList);
 });
 
 
